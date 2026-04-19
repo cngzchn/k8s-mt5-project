@@ -1,0 +1,11 @@
+# Ignore local MT5 binary and data files
+# We will embed these into the Docker image, NOT Git
+mt5/
+
+# Ignore logs and temp files
+*.log
+*.tmp
+.DS_Store
+
+# Ignore Kubernetes credentials if any
+*.kubeconfig
