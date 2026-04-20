@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mt5-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mt5-trading
+  template:
+    metadata:
+      labels:
+        app: mt5-trading
+    spec:
+      containers:
+      - name: mt5-container
+        # Burası artık GitHub kullanıcı adınla aynı!
+        image: docker.io/ccihan/mt5-headless:v1 
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+        volumeMounts:
+        - name: mt5-data
+          mountPath: /mt5/MQL5
+      volumes:
+      - name: mt5-data
+        hostPath:
+          path: /mnt/mt5-data # VMware node'un üzerindeki fiziksel klasör
+          type: DirectoryOrCreate
