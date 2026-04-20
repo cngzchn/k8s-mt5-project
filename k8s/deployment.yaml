@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mt5-deployment
+  name: mt5-boris
 spec:
   replicas: 1
   selector:
@@ -12,19 +12,28 @@ spec:
       labels:
         app: mt5-trading
     spec:
+      # 1. DNS Çözümü: Google DNS'lerini konteynere zorla tanıtıyoruz
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 8.8.4.4
       containers:
       - name: mt5-container
-        # Burası artık GitHub kullanıcı adınla aynı!
-        image: docker.io/cngzchn/mt5-headless:v1 
+        image: docker.io/boris2015/mt5:latest
+        # 2. İzin Çözümü: Konteynere daha fazla yetki veriyoruz (Wine için kritik)
+        securityContext:
+          privileged: true 
         resources:
           limits:
-            cpu: "500m"
-            memory: "1Gi"
+            cpu: "1"
+            memory: "2Gi"
         volumeMounts:
-        - name: mt5-data
-          mountPath: /mt5/MQL5
+        - name: mt5-storage
+          # Loglara göre boris imajı /config klasörünü kullanıyor
+          mountPath: /config 
       volumes:
-      - name: mt5-data
+      - name: mt5-storage
         hostPath:
-          path: /mnt/mt5-data # VMware node'un üzerindeki fiziksel klasör
+          path: /mnt/mt5-data
           type: DirectoryOrCreate
