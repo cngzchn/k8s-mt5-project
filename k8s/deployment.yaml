@@ -15,7 +15,7 @@ spec:
       containers:
       - name: mt5-container
         # Burası artık GitHub kullanıcı adınla aynı!
-        image: docker.io/ccihan/mt5-headless:v1 
+        image: docker.io/cngzchn/mt5-headless:v1 
         resources:
           limits:
             cpu: "500m"
